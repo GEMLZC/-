@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.wolfcode.springboot.ssm.mapper.EmployeeMapper">
+	<resultMap id="BaseResultMap" type="cn.wolfcode.springboot.ssm.domain.Employee">
+		<id column="id" jdbcType="BIGINT" property="id" />
+		<result column="name" jdbcType="VARCHAR" property="name" />
+		<result column="password" jdbcType="VARCHAR" property="password" />
+		<result column="email" jdbcType="VARCHAR" property="email" />
+		<result column="age" jdbcType="INTEGER" property="age" />
+		<result column="salary" jdbcType="DECIMAL" property="salary" />
+	</resultMap>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from t_employee
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<insert id="insert"
+		parameterType="cn.wolfcode.springboot.ssm.domain.Employee">
+		insert into t_employee (id, name, password,
+		email, age, salary)
+		values (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR},
+		#{password,jdbcType=VARCHAR},
+		#{email,jdbcType=VARCHAR}, #{age,jdbcType=INTEGER}, #{salary,jdbcType=DECIMAL})
+	</insert>
+	<update id="updateByPrimaryKey"
+		parameterType="cn.wolfcode.springboot.ssm.domain.Employee">
+		update t_employee
+		set name = #{name,jdbcType=VARCHAR},
+		email = #{email,jdbcType=VARCHAR},
+		age = #{age,jdbcType=INTEGER},
+		salary = #{salary,jdbcType=DECIMAL}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Long"
+		resultMap="BaseResultMap">
+		select id, name, email, age, salary
+		from t_employee
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<select id="selectAll" resultMap="BaseResultMap">
+		select id, name, email, age, salary
+		from t_employee
+		<include refid="empResult"/>
+	</select>
+	
+	<sql id="empResult">
+		<where>
+			<if test="keyword != null">
+				(name like concat('%',#{keyword},'%') or
+				 email like concat('%',#{keyword},'%'))
+			</if>
+			<if test="minSalary != null">
+				and salary >= #{minSalary}
+			</if>
+			<if test="maxSalary != null">
+				and salary &lt;= #{maxSalary}
+			</if>
+		</where>
+	</sql>
+</mapper>
