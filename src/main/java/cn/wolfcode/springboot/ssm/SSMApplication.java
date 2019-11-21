@@ -5,7 +5,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-@MapperScan("cn.wolfcode.springboot.ssm.mapper")
+@MapperScan("cn.wolfcode.springboot.ssm.mapper1")
 public class SSMApplication {
 
 	public static void main(String[] args) {
